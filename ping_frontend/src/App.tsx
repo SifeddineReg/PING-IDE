@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
+import React, { useState } from 'react'
+
+import { Navbar } from './components/navbar/navbar'
+import { Sidebar } from './components/sidebar/sidebar'
+import { Editor } from './components/editor/editor'
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [openedFiles, setOpenedFiles] = useState<File[]>([])
+
+  function open_file() {
+    const file_input = document.querySelector('.file.input') as HTMLInputElement
+    const file = file_input.files?.item(0)
+
+    if (file) {
+      const reader = new FileReader()
+      reader.readAsText(file)
+
+      setOpenedFiles([...openedFiles, file])
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Navbar open_file={open_file}/>
+      <div className='project_editor'>
+        <Sidebar openedFiles={openedFiles} />
+        <Editor openedFiles={openedFiles}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

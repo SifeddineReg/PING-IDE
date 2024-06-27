@@ -1,0 +1,32 @@
+.editor-tabs {
+    display: flex;
+}
+
+.editor-container {
+    height: 100%;
+    width: 80%;
+}
+
+.code-with-lines{
+    display: flex;
+    width: 100%;
+}
+
+.num_lines {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: end;
+    padding: 0 5px 0px 10px;
+    border-right: 1px solid black;
+}
+
+.tab {
+    border-radius: 8px 8px 0px 0px;
+    margin-right: 2px;
+    background-color: rgba(217, 217, 217, 0.830);
+}
+
+.editor-code, .editor{
+    height: 100% !important;
+}

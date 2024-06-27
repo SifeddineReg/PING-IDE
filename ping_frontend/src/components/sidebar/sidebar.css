@@ -1,0 +1,33 @@
+.sidebar {
+    background-color: rgba(217, 217, 217, 0.830);
+    height: 100%;
+    width: 18%;
+    border-radius: 0px 15px 15px 0px;
+}
+
+.project_name {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #A3A1A0;
+    margin-top: 20px;
+}
+
+.project_name h3{
+    color: #212121;
+    padding: 5px 0px 5px 15px;
+    width: 60%;
+    margin: 0;
+}
+
+.project_add{
+    display: flex;
+    width: 30%;
+    color: #212121;
+}
+
+.project_add i{
+    padding: 5px 0px 5px 10px;
+    cursor: pointer;
+}
