@@ -67,7 +67,7 @@ function App() {
     <>
       <Navbar open_file={open_file} open_folder={open_folder}/>
       <div className='project_editor'>
-        <Sidebar treeData={treeData} onFileClick={onFileClick} open_file={open_file} open_folder={open_folder}/>
+        <Sidebar treeData={treeData} onFileClick={onFileClick}/>
         <Editor openedFiles={openedFiles} onFileClose={handleFileClose} />
       </div>
     </>
