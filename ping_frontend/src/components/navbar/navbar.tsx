@@ -1,10 +1,20 @@
+import { HTMLAttributes as Atts } from 'react'
+
 import './navbar.css'
 
 interface NavbarProps {
   open_file: () => void;
+  open_folder: () => void;
 }
 
-export const Navbar = ({open_file}: NavbarProps) => {
+declare module "react" {
+  interface InputHTMLAttributes<T> extends Atts<T> {
+      webkitdirectory?: string;
+      directory?: string;
+  }
+}
+
+export const Navbar = ({open_file, open_folder}: NavbarProps) => {
   return (
     <nav className="navbar">
       <div className="left">
@@ -13,7 +23,8 @@ export const Navbar = ({open_file}: NavbarProps) => {
           <div className="dropdown-content">
             <label htmlFor='file'>Open file</label>
             <input type="file" className='file input' id="file" onChange={open_file}/>
-            <a id="2" href="#">Open Folder</a>
+            <label htmlFor='folder'>Open Folder</label>
+            <input type="file" className='folder input' id="folder" onChange={open_folder} webkitdirectory="" directory=""/>
             <a id="3" href="#">Save</a>
           </div>
         </div>

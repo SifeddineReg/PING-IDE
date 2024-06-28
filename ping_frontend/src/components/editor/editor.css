@@ -2,9 +2,30 @@
     display: flex;
 }
 
+.editor-container.with_tabs {
+    top: -30px;
+}
+
 .editor-container {
     height: 100%;
-    width: 80%;
+    width: 70%;
+    position: relative;
+    margin: auto;
+}
+
+.tab-wrapper {
+    padding: 5px 15px 5px 15px;
+    display: flex;
+    align-items: center;
+    background-color: rgba(217, 217, 217, 0.830);
+    border-radius: 8px 8px 0px 0px;
+}
+
+.close-tab {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 0;
 }
 
 .code-with-lines{
@@ -22,9 +43,10 @@
 }
 
 .tab {
-    border-radius: 8px 8px 0px 0px;
+    border: none;
+    padding: 0;
     margin-right: 2px;
-    background-color: rgba(217, 217, 217, 0.830);
+    background-color: transparent
 }
 
 .editor-code, .editor{
