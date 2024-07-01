@@ -1,23 +1,26 @@
 import { Sequelize } from 'sequelize';
-
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'postgres'
+const sequelize = new Sequelize('postgres',process.env.USERNAME,process.env.PASSWORD,{
+    host: 'localhost',
+    port: '5432',
+    dialect: 'postgres'
 });
 
-// Define the Employe model
-const Employe = sequelize.define('Employe', {
-  ID: {
+const Employe = sequelize.define('Employes', {
+  id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  NAME: {
+  name: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  POSTE: {
-    type: Sequelize.INTEGER,
+  password:{
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  poste: {
+    type: Sequelize.STRING,
     allowNull: false
   },
   runtime: {
@@ -39,12 +42,19 @@ const Employe = sequelize.define('Employe', {
   test_coverage: {
     type: Sequelize.FLOAT,
     allowNull: false
+  },
+  email:{
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  github:{
+    type: Sequelize.STRING,
+    allowNull: true
   }
 });
 
-// Define the Files model
 const Files = sequelize.define('Files', {
-  ID: {
+  id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -71,18 +81,95 @@ const Files = sequelize.define('Files', {
   }
 });
 
-// Create the tables in the database
-sequelize.sync()
+const Task = sequelize.define('Tasks',{
+  id:{
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name:{
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  state:{
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  assignor:{
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    
+  },
+  assignee:{
+    type: Sequelize.INTEGER,
+    allowNull: false
+  }
+});
+
+async function launch_DB(){
+  sequelize.sync()
   .then(() => {
     console.log('Tables created successfully');
   })
   .catch((error) => {
     console.error('Error creating tables:', error);
-  });
+});
+return sequelize;
+}
 
-  const fs = require('fs');
-const { exec } = require('child_process');
-const diff = require('diff');
+async function getEmploye(id)
+{
+  let user = await Employe.findByPk(id)
+  if (user == null)
+        return null
+  return user.dataValues;
+}
+
+async function getFiles_fromid(id)
+{
+  let user = await Files.findByPk(id)
+  if (user == null)
+        return null
+  return user.dataValues;
+}
+
+async function getFiles_frompath(path_given)
+{
+  let user = await Files.findOne({
+    where :
+    {
+      path: path_given
+    }
+  });
+  if (user == null)
+        return null
+  return user.dataValues;
+}
+
+async function updateFile(id,new_path, userID)
+{
+  let user = await Files.findByPk(id)
+  if (user == null)
+    return null
+  user.path = new_path
+  await user.save()
+  /*RUN ALL test coverage and update */
+  return user.dataValues;
+}
+
+async function updateTask(id, new_state)
+{
+  let user = await Task.findByPk(id)
+  if (user == null)
+    return null
+  user.state = new_state
+  await user.save()
+  return user.dataValues;
+}
+
+import * as fs from 'fs';
+import { exec } from'child_process';
+import * as diff from 'diff';
 
 function formatFile(filePath) {
   return new Promise((resolve, reject) => {
@@ -127,43 +214,44 @@ async function checkClangFormat(filePath) {
     const formatted = await formatFile(filePath);
     const conformance = compareFiles(original, formatted);
     console.log(`Conformance to .clang-format: ${conformance.toFixed(2)}%`);
+    return conformance;
   } catch (error) {
     console.error(error);
   }
 }
 
 function runClangTidy(filePath) {
-    return new Promise((resolve, reject) => {
-      exec(`clang-tidy ${filePath} -- -I.`, (error, stdout, stderr) => {
-        if (error) {
-          reject(`Error running clang-tidy: ${stderr}`);
-        } else {
-          resolve(stdout);
-        }
-      });
-    });
-  }
-  
-  function countWarnings(clangTidyOutput) {
-    const warningLines = clangTidyOutput.split('\n').filter(line => line.includes('warning:'));
-    return warningLines.length;
-  }
-  
-  async function checkWarnings(filePath) {
-    try {
-      const clangTidyOutput = await runClangTidy(filePath);
-      const warningCount = countWarnings(clangTidyOutput);
-      console.log(`Number of warnings in ${filePath}: ${warningCount}`);
-    } catch (error) {
-      console.error(error);
+  return new Promise((resolve, reject) => {
+    const fileExtension = filePath.split('.').pop();
+    let command = `clang-tidy ${filePath} -- -I.`;
+
+    if (fileExtension === 'c') {
+      command = `clang-tidy ${filePath} -- -x c -I.`; // Specify language as C
     }
+
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        const errorCount = extractErrorCount(stderr);
+        const totalLines = countLines(filePath);
+        const errorPercentage = (errorCount / totalLines) * 100;
+        resolve(errorPercentage);
+      } else {
+        resolve(0);
+      }
+    });
+  });
+}
+
+function extractErrorCount(stderr) {
+  const match = stderr.match(/(\d+) error(?:s)? generated./);
+  if (match && match[1]) {
+    return parseInt(match[1], 10);
   }
+  return 0;
+}
 
-  const { exec } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import * as path from 'path';
 
-// Function to compile the C++ file
 function compileCpp(filePath, outputPath) {
   return new Promise((resolve, reject) => {
     exec(`g++ ${filePath} -o ${outputPath}`, (error, stdout, stderr) => {
@@ -176,7 +264,6 @@ function compileCpp(filePath, outputPath) {
   });
 }
 
-// Function to measure the runtime of the compiled program
 function measureRuntime(executablePath) {
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
@@ -185,17 +272,16 @@ function measureRuntime(executablePath) {
       if (error) {
         reject(`Error running executable: ${stderr}`);
       } else {
-        const runtime = (end[0] * 1e9 + end[1]) / 1e9; // Convert to seconds
+        const runtime = (end[0] * 1e9 + end[1]) / 1e9; 
         resolve(runtime);
       }
     });
   });
 }
 
-// Main function to compile and measure runtime
 async function estimateRuntime(filePath) {
   try {
-    const outputPath = path.join(__dirname, 'outputExecutable');
+    const outputPath = path.join(process.cwd(), 'outputExecutable');
     await compileCpp(filePath, outputPath);
     const runtime = await measureRuntime(outputPath);
     console.log(`Estimated runtime of ${filePath}: ${runtime.toFixed(6)} seconds`);
@@ -204,6 +290,5 @@ async function estimateRuntime(filePath) {
   }
 }
 
-// Example usage
-const filePath = 'path/to/your/file.cpp';
+const filePath = 'test.c';
 estimateRuntime(filePath);
