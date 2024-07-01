@@ -1,12 +1,10 @@
-import './App.css'
-
 import { useState } from 'react'
 
-import { Navbar } from './components/navbar/navbar'
-import { Sidebar, TreeData } from './components/sidebar/sidebar'
-import { Editor } from './components/editor/editor'
+import { Navbar } from './navbar/navbar'
+import { Sidebar, TreeData } from './sidebar/sidebar'
+import { Editor } from './editor/editor'
 
-function App() {
+function Ide() {
   const [openedFiles, setOpenedFiles] = useState<File[]>([]);
   const [treeData, setTreeData] = useState<TreeData>({});
 
@@ -74,4 +72,4 @@ function App() {
   )
 }
 
-export default App
+export default Ide
