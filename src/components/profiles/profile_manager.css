@@ -1,0 +1,67 @@
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.profile-card {
+  background-color: white;
+  padding: 100px;
+  margin: 80px;
+  border-radius: 10px;
+  max-width: 800px;
+}
+
+.profile{
+  display: flex;
+}
+
+.profile-image {
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.profile-info {
+  margin-left: 20px;
+  text-align: left;
+}
+
+.profile-card h1 {
+  margin: 10px 0;
+}
+
+.profile-card p {
+  margin: 5px 0;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.setting-time input{
+  height: 35px;
+  width: 380px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.setting-time button{
+  margin: 10px;
+  width: 150px;
+}
+
+.setting-theme select{
+  height: 37px;
+  width: 380px;
+  border-radius: 5px;
+  max-width: 370px;
+}
+
+.setting-theme button{
+  margin: 10px;
+  width: 150px;
+}

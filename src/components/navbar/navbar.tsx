@@ -53,7 +53,7 @@ export const Navbar = ({open_file, open_folder}: NavbarProps) => {
         </div>
       </div>
       <div className="right">
-        <div className="profile">
+        <div className="profile_user">
             <button className="nav_button">Sifeddine &nbsp; &#9660;</button>
             <div className="dropdown-content">
               <a id="1" href="#">Profile</a>

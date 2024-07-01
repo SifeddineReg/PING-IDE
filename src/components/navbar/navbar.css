@@ -71,7 +71,7 @@ nav {
 .run:hover .dropdown-content, 
 .terminal:hover .dropdown-content, 
 .help:hover .dropdown-content,
-.profile:hover .dropdown-content,
+.profile_user:hover .dropdown-content,
 .dropdown-content:hover {
     display: block;
 }

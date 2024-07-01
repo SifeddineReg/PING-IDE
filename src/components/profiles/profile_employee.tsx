@@ -1,9 +1,6 @@
-import { useState } from 'react'
-import './App.css'
+import './profile_employee.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export const Profile_Emp = () => {
   return (
     <>
     <div className="navbar">
@@ -32,26 +29,29 @@ function App() {
         </div>
     </div>
 
-    <div className="setting">
-        <div className="setting-time">
-            <p>Set Deadline:</p>
-            <input type='datetime-local'></input>
-            <br></br>
-            <button>Start</button>
-            <button>Stop</button>
+    <div className="stats">
+        <div className="stat">
+            <h2>148 ms</h2>
+            <p>Avg Runtime</p>
         </div>
-        <div className="setting-theme">
-            <p>Set Theme:</p>
-            <select>
-                <option value=""></option>
-            </select>
-            <br></br>
-            <button>Confirm</button>
+        <div className="stat">
+            <h2>78.6%</h2>
+            <p>Code Tidiness</p>
+        </div>
+        <div className="stat">
+            <h2>15</h2>
+            <p>Total Taches</p>
+        </div>
+        <div className="stat">
+            <h2>150</h2>
+            <p>Total Warnings</p>
+        </div>
+        <div className="stat">
+            <h2>66.5%</h2>
+            <p>Avg Test Coverage</p>
         </div>
     </div>
 
     </>
   )
 }
-
-export default App
