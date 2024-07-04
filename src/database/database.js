@@ -1,4 +1,9 @@
 import { Sequelize } from 'sequelize';
+import * as fs from 'fs';
+import { exec } from'child_process';
+import * as diff from 'diff';
+import * as path from 'path';
+
 const sequelize = new Sequelize('postgres',process.env.USERNAME,process.env.PASSWORD,{
     host: 'localhost',
     port: '5432',
@@ -50,6 +55,18 @@ const Employe = sequelize.define('Employes', {
   github:{
     type: Sequelize.STRING,
     allowNull: true
+  },
+  nb_file:{
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false
   }
 });
 
@@ -78,6 +95,14 @@ const Files = sequelize.define('Files', {
   coverage: {
     type: Sequelize.FLOAT,
     allowNull: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false
   }
 });
 
@@ -103,6 +128,15 @@ const Task = sequelize.define('Tasks',{
   assignee:{
     type: Sequelize.INTEGER,
     allowNull: false
+  },
+
+  createdAt: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    allowNull: false
   }
 });
 
@@ -117,7 +151,7 @@ async function launch_DB(){
 return sequelize;
 }
 
-async function getEmploye(id)
+export async function getEmploye(id)
 {
   let user = await Employe.findByPk(id)
   if (user == null)
@@ -125,7 +159,15 @@ async function getEmploye(id)
   return user.dataValues;
 }
 
-async function getFiles_fromid(id)
+export async function getTask(id)
+{
+  let user = await Task.findByPk(id)
+  if (user == null)
+        return null
+  return user.dataValues;
+}
+
+export async function getFiles_fromid(id)
 {
   let user = await Files.findByPk(id)
   if (user == null)
@@ -133,7 +175,7 @@ async function getFiles_fromid(id)
   return user.dataValues;
 }
 
-async function getFiles_frompath(path_given)
+export async function getFiles_frompath(path_given)
 {
   let user = await Files.findOne({
     where :
@@ -146,18 +188,20 @@ async function getFiles_frompath(path_given)
   return user.dataValues;
 }
 
-async function updateFile(id,new_path, userID)
+export async function updateFile(id,new_path, userID)
 {
-  let user = await Files.findByPk(id)
-  if (user == null)
+  let file = await Files.findByPk(id)
+  if (file == null)
     return null
-  user.path = new_path
-  await user.save()
-  /*RUN ALL test coverage and update */
-  return user.dataValues;
+  file.path = new_path
+  file.code_tidiness = checkClangFormat(new_path)
+  file.runtime = estimateRuntime(new_path);
+  file.coverage = coverage(new_path);
+  await file.save()
+  return file.dataValues;
 }
 
-async function updateTask(id, new_state)
+export async function updateTask(id, new_state)
 {
   let user = await Task.findByPk(id)
   if (user == null)
@@ -166,10 +210,6 @@ async function updateTask(id, new_state)
   await user.save()
   return user.dataValues;
 }
-
-import * as fs from 'fs';
-import { exec } from'child_process';
-import * as diff from 'diff';
 
 function formatFile(filePath) {
   return new Promise((resolve, reject) => {
@@ -213,44 +253,42 @@ async function checkClangFormat(filePath) {
     const original = await readFile(filePath);
     const formatted = await formatFile(filePath);
     const conformance = compareFiles(original, formatted);
-    console.log(`Conformance to .clang-format: ${conformance.toFixed(2)}%`);
+    console.log(`Conformance to standard format: ${conformance.toFixed(2)}%`);
     return conformance;
   } catch (error) {
     console.error(error);
   }
 }
 
-function runClangTidy(filePath) {
-  return new Promise((resolve, reject) => {
-    const fileExtension = filePath.split('.').pop();
-    let command = `clang-tidy ${filePath} -- -I.`;
+// function runClangTidy(filePath) {
+//   return new Promise((resolve, reject) => {
+//     const fileExtension = filePath.split('.').pop();
+//     let command = `clang-tidy ${filePath} -- -I.`;
 
-    if (fileExtension === 'c') {
-      command = `clang-tidy ${filePath} -- -x c -I.`; // Specify language as C
-    }
+//     if (fileExtension === 'c') {
+//       command = `clang-tidy ${filePath} -- -x c -I.`; // Specify language as C
+//     }
 
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        const errorCount = extractErrorCount(stderr);
-        const totalLines = countLines(filePath);
-        const errorPercentage = (errorCount / totalLines) * 100;
-        resolve(errorPercentage);
-      } else {
-        resolve(0);
-      }
-    });
-  });
-}
+//     exec(command, (error, stdout, stderr) => {
+//       if (error) {
+//         const errorCount = extractErrorCount(stderr);
+//         const totalLines = countLines(filePath);
+//         const errorPercentage = (errorCount / totalLines) * 100;
+//         resolve(errorPercentage);
+//       } else {
+//         resolve(0);
+//       }
+//     });
+//   });
+// }
 
-function extractErrorCount(stderr) {
-  const match = stderr.match(/(\d+) error(?:s)? generated./);
-  if (match && match[1]) {
-    return parseInt(match[1], 10);
-  }
-  return 0;
-}
-
-import * as path from 'path';
+// function extractErrorCount(stderr) {
+//   const match = stderr.match(/(\d+) error(?:s)? generated./);
+//   if (match && match[1]) {
+//     return parseInt(match[1], 10);
+//   }
+//   return 0;
+// }
 
 function compileCpp(filePath, outputPath) {
   return new Promise((resolve, reject) => {
@@ -290,7 +328,55 @@ async function estimateRuntime(filePath) {
   }
 }
 
-const filePath = 'test.c';
-estimateRuntime(filePath);
+async function coverage(filePath){
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        reject(`Error reading file: ${err}`);
+      }
+      const lines = data.split('\n')
+      let count = 0
+      for (const line of lines)
+        if (line.includes('bool test_coverage()'))
+          count++
+      return count
+    });
+}
 
-export {launch_DB, getEmploye, getFiles_fromid, getFiles_frompath, updateFile, updateTask, checkClangFormat, runClangTidy, compileCpp, measureRuntime, estimateRuntime};
+// async function clearAllTables() {
+//   try {
+//     await Employe.destroy({ where: {}, truncate: true });
+//     await Files.destroy({ where: {}, truncate: true });
+//     await Task.destroy({ where: {}, truncate: true });
+//     console.log('All tables cleared successfully');
+//   } catch (error) {
+//     console.error('Error clearing tables:', error);
+//   }
+//  }
+// (async() => {
+//   clearAllTables()
+// })
+
+// (async () => {
+//   launch_DB() // ca c en 1
+//   const user1 = await Employe.create({
+//     name: "fred", password: "123", poste: 0, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "fred@email.com", github: "github/fred", nb_file: 0
+//   });
+
+//   const user2 = await Employe.create({
+//     name: "sife", password: "456", poste: 1, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "sife@email.com", github: "sife/github", nb_file: 0
+//   });
+  
+//   const user3 = await Employe.create({
+//     name: "marc", password: "789", poste: 0, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "marc@email.com", github: "marc/github", nb_file: 0
+//   });
+
+//   const tache1 = await Task.create({
+//     name: "tache1", state:"UNCOMPLETE", assignor:user2.id,assignee:user1.id
+//   });
+
+
+//   // console.log(await getEmploye(user1.id));
+//   // console.log(await getEmploye(user2.id));
+//   // console.log(await getEmploye(user3.id));
+//   // console.log(await getTask(tache1.id));
+// })();
