@@ -292,3 +292,5 @@ async function estimateRuntime(filePath) {
 
 const filePath = 'test.c';
 estimateRuntime(filePath);
+
+export {launch_DB, getEmploye, getFiles_fromid, getFiles_frompath, updateFile, updateTask, checkClangFormat, runClangTidy, compileCpp, measureRuntime, estimateRuntime};

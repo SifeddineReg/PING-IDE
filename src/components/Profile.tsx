@@ -1,15 +1,39 @@
+// Import necessary hooks and components
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Profile_Emp } from "./profiles/profile_employee";
 import { Profile_Man } from "./profiles/profile_manager";
+import { Navbar } from "./navbar/navbar";
+
+// import {launch_DB} from '../database/database';
+
+// Import the database functions
+// import { getEmploye } from '../database/database';
 
 export const Profile = () => {
-    // if user role is employee then return Profile_Emp
-    // if user role is manager then return Profile_Man
-    // data will be fetched with a function later on for now just return the component
+    const { id } = useParams()
+    const [userRole, setUserRole] = useState(null);
+
+    // useEffect(() => {
+    //     const checkUserRole = async () => {
+    //         const user = await getEmploye(id);
+    //         if (user) {
+    //             setUserRole(user.poste);
+    //         } else {
+    //             console.error('User not found');
+    //         }
+    //     };
+
+    //     checkUserRole();
+    // }, [id]);
+
+    function empty() { }
 
     return (
         <>
-            <Profile_Emp />
+            <Navbar open_file={empty} open_folder={empty} />
+            {userRole === 'employee' && <Profile_Emp />}
+            {userRole === 'manager' && <Profile_Man />}
         </>
-    )
+    );
 }
-        

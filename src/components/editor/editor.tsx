@@ -11,6 +11,16 @@ import 'codemirror/mode/clike/clike'
 import 'codemirror/mode/php/php'
 import 'codemirror/mode/shell/shell'
 import { Controlled as EditorControlled } from 'react-codemirror2'
+import { linter } from '@codemirror/lint'
+
+const Linter = async (view: any) => {
+  return [{
+    from: view.state.doc.line(1).from,
+    to: view.state.doc.line(1).to,
+    severity: 'error',
+    message: 'Example error message',
+  }]
+}
 
 export interface EditorProps {
   openedFiles: File[];
@@ -31,8 +41,10 @@ const ext_to_mode: { [key: string]: string } = {
   'md': 'markdown',
   'java': 'clike',
   'c': 'clike',
+  'cc': 'clike',
   'cpp': 'clike',
   'h': 'clike',
+  'hh': 'clike',
   'hpp': 'clike',
   'php': 'php',
   'sh': 'shell',
@@ -41,6 +53,43 @@ const ext_to_mode: { [key: string]: string } = {
 export const Editor = (props: EditorProps) => {
   const [currentFile, setCurrentFile] = useState<File | null>(props.openedFiles[0] || null);
   const [code, setCode] = useState('');
+
+  function save_file() {
+      const updateRequest = {
+          path: currentFile,
+          from: 0,
+          to: 0,
+          content: code,
+      };
+
+      fetch(`http://localhost:8080/api/update`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          mode: 'no-cors',
+          body: JSON.stringify(updateRequest),
+      }).then((response) => {
+          console.log(response);
+      }).catch((error) => {
+          console.error('Error:', error);
+      });
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        save_file();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [currentFile, code])
 
   useEffect(() => {
     if (currentFile && !props.openedFiles.includes(currentFile)) {
@@ -101,12 +150,16 @@ export const Editor = (props: EditorProps) => {
           className="editor"
           options={{
             lineWrapping: true,
-            lint: true,
+            lint: {
+              getAnnotations: Linter,
+              lintOnChange: true,
+            },
             mode: ext_to_mode[currentFile?.name.split('.').pop() as string] || 'text',
             lineNumbers: true,
             smartIndent: true,
             indentWithTabs: true,
             tabSize: 2,
+            gutters: ['CodeMirror-lint-markers'],
           }}
         />
       </div>

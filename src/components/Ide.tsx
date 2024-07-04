@@ -19,6 +19,15 @@ function Ide() {
       };
       reader.readAsText(file);
     }
+
+    fetch(`http://localhost:8080/api/hello`, {
+      method: 'GET',
+      mode: 'no-cors',
+    }).then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.error('Error:', error);
+    });
   }
 
   function organizeTreeStructure(files: File[]): TreeData {

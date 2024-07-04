@@ -1,0 +1,71 @@
+.backlog-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    width: 80%;
+    height: 70%;
+}
+
+.columns {
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.column {
+    width: 25%;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.tasks {
+    height: 85%;
+    overflow-y: auto;
+}
+
+.tasks::-webkit-scrollbar {
+    display: none;
+}
+
+.column.todo {
+    background-color: rgba(61, 108, 227, 0.85);
+    color: black;
+}
+
+.column.doing {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: black;
+}
+
+.column.done {
+    background-color: rgba(69, 208, 19, 0.85);
+    color: black;
+}
+
+.task {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: center;
+    height: 100px;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #555555;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #000000;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 5px;
+}
