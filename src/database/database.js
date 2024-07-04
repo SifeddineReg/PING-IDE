@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { exec } from'child_process';
 import * as diff from 'diff';
 import * as path from 'path';
+import { randomInt } from 'crypto';
 
 const sequelize = new Sequelize('postgres',process.env.USERNAME,process.env.PASSWORD,{
     host: 'localhost',
@@ -42,7 +43,7 @@ const Employe = sequelize.define('Employes', {
   },
   total_warnings: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   test_coverage: {
     type: Sequelize.FLOAT,
@@ -188,9 +189,13 @@ export async function getFiles_frompath(path_given)
   return user.dataValues;
 }
 
-export async function updateFile(id,new_path, userID)
+export async function updateFile(path, userID)
 {
-  let file = await Files.findByPk(id)
+  let file = await Files.findOne({
+    where:{
+      path: path
+    }
+  })
   if (file == null)
     return null
   file.path = new_path
@@ -198,6 +203,15 @@ export async function updateFile(id,new_path, userID)
   file.runtime = estimateRuntime(new_path);
   file.coverage = coverage(new_path);
   await file.save()
+  let user = await Employe.findByPk(userID)
+  user.nb_file = user.nb_file+1;
+  user.runtime = user.runtime + file.runtime / user.nb_filep;
+  let tmp = randomInt(-10,10)
+  if (user.warnings + tmp < 0)
+    user.warnings = 5
+  else
+    user.total_warnings = user.warnings + tmp;
+  user.test_coverage = user.test_coverage+ file.coverage;
   return file.dataValues;
 }
 
