@@ -8,7 +8,7 @@ function Ide() {
   const [openedFiles, setOpenedFiles] = useState<File[]>([]);
   const [treeData, setTreeData] = useState<TreeData>({});
 
-  function open_file() {
+  async function open_file() {
     const file_input = document.querySelector('.file.input') as HTMLInputElement;
     const file = file_input.files?.item(0);
 
@@ -20,12 +20,14 @@ function Ide() {
       reader.readAsText(file);
     }
 
-    fetch(`http://localhost:8080/api/hello`, {
+    await fetch('/api/hello', {
       method: 'GET',
-      mode: 'no-cors',
-    }).then((response) => {
-      console.log(response);
-    }).catch((error) => {
+    }).then(response => {
+      // reponse body is a ReadableStream, so we call .json() to get the JSON data
+      return response.json();
+    }).then(data => {
+      console.log(data);
+    }).catch(error => {
       console.error('Error:', error);
     });
   }

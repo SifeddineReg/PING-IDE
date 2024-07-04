@@ -32,6 +32,7 @@ export const Profile = () => {
     return (
         <>
             <Navbar open_file={empty} open_folder={empty} />
+            <Profile_Emp />
             {userRole === 'employee' && <Profile_Emp />}
             {userRole === 'manager' && <Profile_Man />}
         </>
