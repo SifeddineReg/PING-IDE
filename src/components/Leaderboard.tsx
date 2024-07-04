@@ -4,6 +4,7 @@ export function Leaderboard()
 {
     return(    
         <>
+        <div>
         <div className="container podium">
         <div className="podium__item">
             <p className="podium__city">Annecy</p>
@@ -44,8 +45,7 @@ export function Leaderboard()
             <div className='podium_member points'> 50 pts</div>
         </div>
         <div className='deadline_text' > Deadline : 01/07/2024 21:42 </div>
-        <div className="image-container">
-            <img src="src/assets/second_place.png" alt="Medal"></img>
+        
         </div>
         </>
     )

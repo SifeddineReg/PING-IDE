@@ -1,5 +1,5 @@
 import express from 'express';
-import { getEmploye, getTask, getFiles_fromid, getFiles_frompath, updateFile, updateTask }  from '../database/database.js';
+import { getEmploye, getTask, getFiles_fromid, getFiles_frompath, updateFile, updateTask, AddFile, AddTask }  from '../database/database.js';
 
 const app = express();
 const port = 3000;
@@ -69,6 +69,18 @@ app.put('/task/:id', async (req, res) => {
     res.status(404).send('Task not found');
   }
 });
+
+app.put('/file/add',async (req,res) => {
+  const path = req.params.path;
+  await AddFile(path)
+})
+
+app.put('/task/add',async (req,res) => {
+  const name = req.params.name;
+  const assignee = req.params.assignee;
+  const assignor = req.params.assignor;
+  await AddTask(name,assignee,assignor)
+})
 
 app.listen(port, () => {
   console.log("Server listening at http://localhost:${port}");

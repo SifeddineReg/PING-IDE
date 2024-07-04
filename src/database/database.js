@@ -130,7 +130,6 @@ const Task = sequelize.define('Tasks',{
     type: Sequelize.INTEGER,
     allowNull: false
   },
-
   createdAt: {
     type: Sequelize.DATE,
     allowNull: false
@@ -160,9 +159,14 @@ export async function getEmploye(id)
   return user.dataValues;
 }
 
-export async function getTask(id)
+export async function getTask(name)
 {
-  let user = await Task.findByPk(id)
+  let user = await Task.findOne({
+    where :
+    {
+      name: name
+    }
+  });
   if (user == null)
         return null
   return user.dataValues;
@@ -204,6 +208,8 @@ export async function updateFile(path, userID)
   file.coverage = coverage(new_path);
   await file.save()
   let user = await Employe.findByPk(userID)
+  if (user == null)
+    return file.dataValues; 
   user.nb_file = user.nb_file+1;
   user.runtime = user.runtime + file.runtime / user.nb_filep;
   let tmp = randomInt(-10,10)
@@ -214,6 +220,21 @@ export async function updateFile(path, userID)
   user.test_coverage = user.test_coverage+ file.coverage;
   return file.dataValues;
 }
+
+export async function AddFile(new_path)
+{
+  if (updateFile(new_path) != null)
+    return;
+  const tmp = await Files.create({path: new_path, code_tidiness:0, runtime:0, warnings:0, coverage:0});
+}
+
+export async function AddTask(name, assignor, assignee)
+{
+  if (getTask(name) != null)
+    return;
+  const tmp = await Task.create({name: name, state:"UNCOMPLETE", assignor:assignor, assignee:assignee});
+}
+
 
 export async function updateTask(id, new_state)
 {
