@@ -1,4 +1,4 @@
-# PING: Un Projet réalisé avec React et Java
+# PING: Un éditeur de code web réalisé en React et Java
 
 ## Lancement du Projet
 
