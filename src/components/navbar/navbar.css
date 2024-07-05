@@ -15,9 +15,17 @@ nav {
     align-items: center;
 }
 
-.file, .run, .terminal, .help {
+.file, .run, .terminal, .help, .ide {
     position: relative;
     display: block;
+}
+
+.save {
+    cursor: pointer;
+}
+
+.ide {
+    border-radius: 15px;
 }
 
 .nav_button {

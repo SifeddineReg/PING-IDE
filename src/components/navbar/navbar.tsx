@@ -19,6 +19,15 @@ declare module "react" {
 export const Navbar = ({open_file, open_folder}: NavbarProps) => {
   const location = useLocation();
 
+  const save = () => {
+    // mimic ctrl-s
+    const event = new KeyboardEvent('keydown', {
+      key: 's',
+      ctrlKey: true,
+    });
+    document.dispatchEvent(event);
+  };
+
   return (
     <nav>
       <div className="left">
@@ -27,11 +36,10 @@ export const Navbar = ({open_file, open_folder}: NavbarProps) => {
             <div className="file">
               <button className="nav_button">File</button>
               <div className="dropdown-content">
-                <label htmlFor='file'>Open file</label>
-                <input type="file" className='file input' id="file" onChange={open_file}/>
-                <label htmlFor='folder'>Open Folder</label>
-                <input type="file" className='folder input' id="folder" onChange={open_folder} webkitdirectory="" directory=""/>
-                <a id="3" href="#">Save</a>
+                <label htmlFor='file' onClick={open_file}>Open file</label>          
+                <label htmlFor='folder' onClick={open_folder}>Open Folder</label>
+                <input type='file' id="folder" className='folder input' webkitdirectory='' directory=''/>
+                <a className='save' onClick={save}>Save</a>
               </div>
             </div>
 
@@ -39,13 +47,11 @@ export const Navbar = ({open_file, open_folder}: NavbarProps) => {
               <button className="nav_button">Run</button>
               <div className="dropdown-content">
                 <a id="1" href="#">Run file</a>
-                <a id="2" href="#">Run project</a>
               </div>
             </div>
             <div className="terminal">
               <button className="nav_button">Terminal</button>
               <div className="dropdown-content">
-                <a id="1" href="#">New terminal</a>
                 <a id="2" href="#">Clear terminal</a>
               </div>
             </div>
@@ -57,10 +63,13 @@ export const Navbar = ({open_file, open_folder}: NavbarProps) => {
             </div>
           </>
         )}
-        {(location.pathname.startsWith('/profile') || location.pathname === '/leaderboard') && (
+        {(location.pathname.startsWith('/profile') 
+          || location.pathname === '/leaderboard' 
+          || location.pathname === '/tasks') 
+        && (
           <>
             <div className="ide">
-              <button className="nav_button">IDE</button>
+              <a className="nav_button ide" href='/'>IDE</a>
             </div>
             <div className="help">
               <button className="nav_button">Help</button>
@@ -75,8 +84,7 @@ export const Navbar = ({open_file, open_folder}: NavbarProps) => {
         <div className="profile_user">
           <button className="nav_button">Sifeddine &nbsp; &#9660;</button>
           <div className="dropdown-content">
-            <a id='1' href="">Profile</a>
-            <a id="2" href="#">Leaderboard</a>
+            <a id="2" href="/leaderboard">Leaderboard</a>
             <a id="3" href="#">Disconnect</a>
           </div>
         </div>

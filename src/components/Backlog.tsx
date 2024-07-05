@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Backlog.css';
 import { Navbar } from './navbar/navbar';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import data from '../assets/data.json';
+
+type Task = {
+    name: string;
+    assignee: string;
+    assignor: string;
+    state: string;
+};
 
 type TaskState = {
-    todo: string[];
-    doing: string[];
-    done: string[];
+    todo: Task[];
+    doing: Task[];
+    done: Task[];
 };
 
 export const Backlog: React.FC = () => {
     const [tasks, setTasks] = useState<TaskState>({
-        todo: ['Task 1', 'Task 2', 'Task 3', 'Task 4', 'Task 5'],
+        todo: [],
         doing: [],
         done: []
     });
+
+    // Fetch data from data.json on component mount
+    useEffect(() => {
+        // Assuming data.json has an object with todo, doing, done arrays
+        setTasks({
+            todo: data.tasks,
+            doing: [],
+            done: []
+        });
+    }, []);
+
+    function map_id_to_name(id: number) {
+        return data.users.find((user: any) => user.id === id)?.name;
+    }
 
     const totalTasks = tasks.todo.length + tasks.doing.length + tasks.done.length;
     const progress = totalTasks > 0 ? (tasks.done.length / totalTasks) * 100 : 0;
@@ -55,7 +77,7 @@ export const Backlog: React.FC = () => {
                                         <h2>{columnId.charAt(0).toUpperCase() + columnId.slice(1)}</h2>
                                         <div className='tasks'>
                                             {tasks[columnId as keyof TaskState].map((task, index) => (
-                                                <Draggable key={task} draggableId={task} index={index}>
+                                                <Draggable key={task.name} draggableId={task.name} index={index}>
                                                     {(provided) => (
                                                         <div
                                                             className="task"
@@ -63,7 +85,8 @@ export const Backlog: React.FC = () => {
                                                             {...provided.draggableProps}
                                                             {...provided.dragHandleProps}
                                                         >
-                                                            {task}
+                                                            <p>Name: {task.name}</p>
+                                                            <p>Assignee: {map_id_to_name(parseInt(task.assignee))}</p>
                                                         </div>
                                                     )}
                                                 </Draggable>

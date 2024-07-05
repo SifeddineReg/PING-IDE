@@ -1,57 +1,57 @@
-import './profile_employee.css'
+import './profile_employee.css';
+import defaultPic from '../../assets/default_pic.png';
 
-export const Profile_Emp = () => {
+interface ProfileProps {
+    user: {
+        name: string;
+        email: string;
+        github: string;
+        runtime: number;
+        code_tidiness: number;
+        total_tache: number;
+        total_warnings: number;
+        test_coverage: number;
+    };
+}
+
+export const Profile_Emp = ({ user }: ProfileProps) => {
   return (
     <>
-    <div className="navbar">
-        <div className="nav-left">
-            <a href="#">IDE</a>
-            <a href="#">Leaderboard</a>
-            <a href="#">Help</a>
+      <div className="profile-card">
+        <div className="profile">
+          <div className="profile-image">
+            <img src={defaultPic} alt="Profile Picture" />
+          </div>
+          <div className="profile-info">
+            <h1>{user.name}</h1>
+            <p>Email: {user.email}</p>
+            <p>Github: <a href={`https://github.com/${user.github}`}>{`https://github.com/${user.github}`}</a></p>
+          </div>
         </div>
-        <div className="nav-right">
-            <select>
-                <option value="sifeddine">Sifeddine</option>
-            </select>
-        </div>
-    </div>
+      </div>
 
-    <div className="profile-card">
-        <div className='profile'>
-        <div className="profile-image">
-            <img src="https://via.placeholder.com/100" alt="Profile Picture"/>
+      <div className="stats">
+        <div className="stat stat-blue">
+          <h2>{user.runtime} ms</h2>
+          <p>Avg Runtime</p>
         </div>
-        <div className="profile-info">
-          <h1>Sifeddine Regragui</h1>
-          <p>Email: sifeddine.regragui@epita.fr</p>
-          <p>Github: <a href="https://github.com/SifeddineReg">https://github.com/SifeddineReg</a></p>
+        <div className="stat stat-black">
+          <h2>{user.code_tidiness}%</h2>
+          <p>Code Tidiness</p>
         </div>
+        <div className="stat stat-red">
+          <h2>{user.total_tache}</h2>
+          <p>Total Taches</p>
         </div>
-    </div>
-
-    <div className="stats">
-        <div className="stat">
-            <h2>148 ms</h2>
-            <p>Avg Runtime</p>
+        <div className="stat stat-yellow">
+          <h2>{user.total_warnings}</h2>
+          <p>Total Warnings</p>
         </div>
-        <div className="stat">
-            <h2>78.6%</h2>
-            <p>Code Tidiness</p>
+        <div className="stat stat-green">
+          <h2>{user.test_coverage}%</h2>
+          <p>Avg Test Coverage</p>
         </div>
-        <div className="stat">
-            <h2>15</h2>
-            <p>Total Taches</p>
-        </div>
-        <div className="stat">
-            <h2>150</h2>
-            <p>Total Warnings</p>
-        </div>
-        <div className="stat">
-            <h2>66.5%</h2>
-            <p>Avg Test Coverage</p>
-        </div>
-    </div>
-
+      </div>
     </>
-  )
-}
+  );
+};

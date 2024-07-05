@@ -5,6 +5,8 @@ import { Profile_Emp } from "./profiles/profile_employee";
 import { Profile_Man } from "./profiles/profile_manager";
 import { Navbar } from "./navbar/navbar";
 
+import db from '../assets/data.json';
+
 // import {launch_DB} from '../database/database';
 
 // Import the database functions
@@ -12,29 +14,36 @@ import { Navbar } from "./navbar/navbar";
 
 export const Profile = () => {
     const { id } = useParams()
-    const [userRole, setUserRole] = useState(null);
+    const [user, setUser] = useState<{ 
+        id: number; 
+        name: string; 
+        password: string; 
+        poste: number; 
+        runtime: number; 
+        code_tidiness: number; 
+        total_tache: number; 
+        total_warnings: number; 
+        test_coverage: number; 
+        email: string; github: 
+        string; nb_file: 
+        number; 
+    } | null>(null);
 
-    // useEffect(() => {
-    //     const checkUserRole = async () => {
-    //         const user = await getEmploye(id);
-    //         if (user) {
-    //             setUserRole(user.poste);
-    //         } else {
-    //             console.error('User not found');
-    //         }
-    //     };
+    useEffect(() => {
+        const user = db.users.find((user: any) => `${user.id}` === id);
+        if (user)
+            setUser(user);
 
-    //     checkUserRole();
-    // }, [id]);
+        console.log(user);
+    }, [id]);
 
     function empty() { }
 
     return (
         <>
             <Navbar open_file={empty} open_folder={empty} />
-            <Profile_Emp />
-            {userRole === 'employee' && <Profile_Emp />}
-            {userRole === 'manager' && <Profile_Man />}
+            {user?.poste === 0 && <Profile_Emp user={user} />}
+            {user?.poste === 1 && <Profile_Man user={user} />}
         </>
     );
 }

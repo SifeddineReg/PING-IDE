@@ -1,0 +1,122 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Frederic Dong",
+            "password": "123",
+            "poste": 0,
+            "runtime": 5.2,
+            "code_tidiness": 87,
+            "total_tache": 3,
+            "total_warnings": 2,
+            "test_coverage": 75,
+            "email": "fred@email.com",
+            "github": "github/fred",
+            "nb_file": 14
+        },
+        {
+            "id": 2,
+            "name": "Sifeddine Regragui",
+            "password": "456",
+            "poste": 1,
+            "runtime": 4.8,
+            "code_tidiness": 92,
+            "total_tache": 5,
+            "total_warnings": 1,
+            "test_coverage": 80,
+            "email": "sife@email.com",
+            "github": "sife/github",
+            "nb_file": 20
+        },
+        {
+            "id": 3,
+            "name": "Marc Wang",
+            "password": "789",
+            "poste": 0,
+            "runtime": 6.1,
+            "code_tidiness": 85,
+            "total_tache": 2,
+            "total_warnings": 3,
+            "test_coverage": 70,
+            "email": "marc@email.com",
+            "github": "marc/github",
+            "nb_file": 10
+        },
+        {
+            "id": 4,
+            "name": "Rohan Hassan Daya",
+            "password": "789",
+            "poste": 0,
+            "runtime": 5.5,
+            "code_tidiness": 90,
+            "total_tache": 4,
+            "total_warnings": 2,
+            "test_coverage": 78,
+            "email": "Rohan@email.com",
+            "github": "Rohan/github",
+            "nb_file": 16
+        },
+        {
+            "id": 5,
+            "name": "Anthony Zheng",
+            "password": "789",
+            "poste": 0,
+            "runtime": 4.5,
+            "code_tidiness": 88,
+            "total_tache": 3,
+            "total_warnings": 4,
+            "test_coverage": 82,
+            "email": "Anthony@email.com",
+            "github": "Anthony/github",
+            "nb_file": 12
+        }
+    ],
+    "tasks": [
+        {
+            "name": "tache1",
+            "state": "TODO",
+            "assignor": "2",
+            "assignee": "1"
+        },
+        {
+            "name": "tache2",
+            "state": "TODO",
+            "assignor": "2",
+            "assignee": "3"
+        },
+        {
+            "name": "tache3",
+            "state": "TODO",
+            "assignor": "2",
+            "assignee": "4"
+        },
+        {
+            "name": "tache4",
+            "state": "TODO",
+            "assignor": "2",
+            "assignee": "5"
+        },
+        {
+            "name": "tache5",
+            "state": "TODO",
+            "assignor": "2",
+            "assignee": "1"
+        }
+    ],
+    "themes": [
+        {
+            "name": "Olympic",
+            "background": "assets/olympics_pictograms.jpg"
+        },
+        {
+            "name": "Tennis",
+            "background": "assets/roland-garros-tournament-profile.jpg"
+        },
+        {
+            "name": "Football",
+            "background": "assets/foot.jpg"
+        }
+    ],
+    "deadline": "2021-06-30 23:59:59",
+    "current_theme": "Olympic"
+}

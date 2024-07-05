@@ -5,10 +5,18 @@ import * as diff from 'diff';
 import * as path from 'path';
 import { randomInt } from 'crypto';
 
-const sequelize = new Sequelize('postgres',process.env.USERNAME,process.env.PASSWORD,{
-    host: 'localhost',
-    port: '5432',
-    dialect: 'postgres'
+const config = {
+  user: 'postgres',
+  password: 'mysecretpassword',
+  host: 'localhost',
+  port: 5432,
+  database: 'postgres'
+}
+
+const sequelize = new Sequelize(config.database, config.user, config.password, {
+  host: config.host,
+  port: config.port,
+  dialect: 'postgres'
 });
 
 const Employe = sequelize.define('Employes', {
@@ -391,27 +399,27 @@ async function coverage(filePath){
 //   clearAllTables()
 // })
 
-// (async () => {
-//   launch_DB() // ca c en 1
-//   const user1 = await Employe.create({
-//     name: "fred", password: "123", poste: 0, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "fred@email.com", github: "github/fred", nb_file: 0
-//   });
+(async () => {
+  launch_DB() // ca c en 1
+  const user1 = await Employe.create({
+    name: "fred", password: "123", poste: 0, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "fred@email.com", github: "github/fred", nb_file: 0
+  });
 
-//   const user2 = await Employe.create({
-//     name: "sife", password: "456", poste: 1, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "sife@email.com", github: "sife/github", nb_file: 0
-//   });
+  const user2 = await Employe.create({
+    name: "sife", password: "456", poste: 1, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "sife@email.com", github: "sife/github", nb_file: 0
+  });
   
-//   const user3 = await Employe.create({
-//     name: "marc", password: "789", poste: 0, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "marc@email.com", github: "marc/github", nb_file: 0
-//   });
+  const user3 = await Employe.create({
+    name: "marc", password: "789", poste: 0, runtime: 0, code_tidiness: 0, total_tache: 0, total_warnings: 0, test_coverage: 0, email: "marc@email.com", github: "marc/github", nb_file: 0
+  });
 
-//   const tache1 = await Task.create({
-//     name: "tache1", state:"UNCOMPLETE", assignor:user2.id,assignee:user1.id
-//   });
+  const tache1 = await Task.create({
+    name: "tache1", state:"UNCOMPLETE", assignor:user2.id,assignee:user1.id
+  });
 
 
-//   // console.log(await getEmploye(user1.id));
-//   // console.log(await getEmploye(user2.id));
-//   // console.log(await getEmploye(user3.id));
-//   // console.log(await getTask(tache1.id));
-// })();
+  // console.log(await getEmploye(user1.id));
+  // console.log(await getEmploye(user2.id));
+  // console.log(await getEmploye(user3.id));
+  // console.log(await getTask(tache1.id));
+})();

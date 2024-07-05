@@ -4,29 +4,23 @@ import { Navbar } from './navbar/navbar'
 import { Sidebar, TreeData } from './sidebar/sidebar'
 import { Editor } from './editor/editor'
 
+export interface MyFile {
+  absolutePath: string;
+  name: string;
+  content: string;
+}
+
 function Ide() {
-  const [openedFiles, setOpenedFiles] = useState<File[]>([]);
+  const [openedFiles, setOpenedFiles] = useState<MyFile[]>([]);
   const [treeData, setTreeData] = useState<TreeData>({});
 
   async function open_file() {
-    const file_input = document.querySelector('.file.input') as HTMLInputElement;
-    const file = file_input.files?.item(0);
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setOpenedFiles(prevFiles => [...prevFiles, file]);
-      };
-      reader.readAsText(file);
-    }
-
-    await fetch('/api/hello', {
+    await fetch('/api/open/file', {
       method: 'GET',
     }).then(response => {
-      // reponse body is a ReadableStream, so we call .json() to get the JSON data
       return response.json();
     }).then(data => {
-      console.log(data);
+      setOpenedFiles(prevFiles => [...prevFiles, data]);
     }).catch(error => {
       console.error('Error:', error);
     });
@@ -48,8 +42,6 @@ function Ide() {
       }
     });
 
-    console.log(tree);
-
     return tree;
   }
 
@@ -64,11 +56,11 @@ function Ide() {
     }
   };
 
-  const onFileClick = (file: File) => {
+  const onFileClick = (file: MyFile) => {
     setOpenedFiles(prevFiles => [...prevFiles, file])
   }
 
-  function handleFileClose(fileToClose: File) {
+  function handleFileClose(fileToClose: MyFile) {
     setOpenedFiles(openedFiles.filter(file => file !== fileToClose));
   }
 

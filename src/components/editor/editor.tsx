@@ -11,20 +11,11 @@ import 'codemirror/mode/clike/clike'
 import 'codemirror/mode/php/php'
 import 'codemirror/mode/shell/shell'
 import { Controlled as EditorControlled } from 'react-codemirror2'
-import { linter } from '@codemirror/lint'
-
-const Linter = async (view: any) => {
-  return [{
-    from: view.state.doc.line(1).from,
-    to: view.state.doc.line(1).to,
-    severity: 'error',
-    message: 'Example error message',
-  }]
-}
+import { MyFile } from '../Ide'
 
 export interface EditorProps {
-  openedFiles: File[];
-  onFileClose: (file: File) => void;
+  openedFiles: MyFile[];
+  onFileClose: (file: MyFile) => void;
 }
 
 const ext_to_mode: { [key: string]: string } = {
@@ -51,29 +42,26 @@ const ext_to_mode: { [key: string]: string } = {
 };
 
 export const Editor = (props: EditorProps) => {
-  const [currentFile, setCurrentFile] = useState<File | null>(props.openedFiles[0] || null);
+  const [currentFile, setCurrentFile] = useState<MyFile | null>(props.openedFiles[0] || null);
   const [code, setCode] = useState('');
 
-  function save_file() {
-      const updateRequest = {
-          path: currentFile,
-          from: 0,
-          to: 0,
-          content: code,
-      };
+  async function save_file() {
+    await fetch('/api/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        path: currentFile?.absolutePath,
+        content: code,
+      }),
+    }).then(response => {
+      return response.json();
+    }).then(data => {
+      console.log(data);
+    })
 
-      fetch(`http://localhost:8080/api/update`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          mode: 'no-cors',
-          body: JSON.stringify(updateRequest),
-      }).then((response) => {
-          console.log(response);
-      }).catch((error) => {
-          console.error('Error:', error);
-      });
+    await fetch('/db/update', {})
   }
 
   useEffect(() => {
@@ -102,17 +90,11 @@ export const Editor = (props: EditorProps) => {
     } else if (!currentFile && props.openedFiles.length > 0) {
       setCurrentFile(props.openedFiles[0]);
     } else if (currentFile) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target) {
-          setCode(e.target.result as string);
-        }
-      };
-      reader.readAsText(currentFile);
+      setCode(currentFile.content);
     }
   }, [currentFile, props.openedFiles]);
 
-  const handleFileTabClick = (file: File) => {
+  const handleFileTabClick = (file: MyFile) => {
     setCurrentFile(file);
   };
 
@@ -150,16 +132,16 @@ export const Editor = (props: EditorProps) => {
           className="editor"
           options={{
             lineWrapping: true,
-            lint: {
-              getAnnotations: Linter,
-              lintOnChange: true,
-            },
-            mode: ext_to_mode[currentFile?.name.split('.').pop() as string] || 'text',
+            lint: true,
+            mode: 'python',
             lineNumbers: true,
             smartIndent: true,
             indentWithTabs: true,
             tabSize: 2,
             gutters: ['CodeMirror-lint-markers'],
+            extraKeys: {
+              'Ctrl-Space': 'autocomplete'
+            }
           }}
         />
       </div>

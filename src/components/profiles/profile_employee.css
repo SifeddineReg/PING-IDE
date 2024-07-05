@@ -2,30 +2,33 @@
   padding: 2em;
 }
 
-.read-the-docs {
-  color: #888;
-}
-
 .profile-card {
-  background-color: white;
-  padding: 100px;
-  margin: 80px;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 50px;
+  margin: 10px auto;
   border-radius: 10px;
-  max-width: 800px;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.profile{
+.profile {
   display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
-.profile-image {
-  text-align: left;
-  flex-shrink: 0;
+.profile-image img {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
 }
 
 .profile-info {
   margin-left: 20px;
   text-align: left;
+  flex: 1;
 }
 
 .profile-card h1 {
@@ -40,18 +43,21 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
+  margin-top: 40px;
 }
 
 .stat {
-  background-color: white;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.85);
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .stat h2 {
@@ -60,4 +66,24 @@
 
 .stat p {
   margin: 0;
+}
+
+.stat-blue {
+  border: 5px solid #007bff;
+}
+
+.stat-black {
+  border: 5px solid #000;
+}
+
+.stat-red {
+  border: 5px solid #ff0000;
+}
+
+.stat-yellow {
+  border: 5px solid #ffeb3b;
+}
+
+.stat-green {
+  border: 5px solid #4caf50;
 }

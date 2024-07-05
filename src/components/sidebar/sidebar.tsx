@@ -1,11 +1,12 @@
 import React, { useState, HTMLAttributes as Atts } from 'react';
 import './sidebar.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { MyFile } from '../Ide';
 
 interface TreeNodeProps {
   name: string;
   children?: any;
-  onClick?: (file: File) => void;
+  onClick?: (file: MyFile) => void;
 }
 
 const TreeNode: React.FC<TreeNodeProps> = ({ name, children, onClick }) => {
@@ -13,8 +14,8 @@ const TreeNode: React.FC<TreeNodeProps> = ({ name, children, onClick }) => {
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
-  const handleClick = (file?: File) => {
-    if (onClick && file instanceof File) {
+  const handleClick = (file?: MyFile) => {
+    if (onClick && file) {
       onClick(file);
     }
   };
@@ -59,7 +60,7 @@ declare module "react" {
 }
 
 export const Sidebar = ({treeData, onFileClick }: 
-  { treeData: TreeData; onFileClick: (file: File) => void }) => {
+  { treeData: TreeData; onFileClick: (file: MyFile) => void }) => {
   return (
     <div className="sidebar">
       <div className="project_name">

@@ -26,6 +26,7 @@
     background-color: transparent;
     border: none;
     padding: 0;
+    color: black;
 }
 
 .code-with-lines{
@@ -46,8 +47,21 @@
     border: none;
     padding: 0;
     margin-right: 2px;
-    background-color: transparent
+    background-color: transparent;
+    color: black;
 }
+
+.tab-wrapper:has(+ .active) {
+    background-color: rgba(217, 217, 217, 0.830);
+}
+
+.tab:active {
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    
+}
+
 
 .editor-code, .editor{
     height: 100% !important;

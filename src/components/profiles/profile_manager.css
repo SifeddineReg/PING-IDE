@@ -2,16 +2,15 @@
   padding: 2em;
 }
 
-.read-the-docs {
-  color: #888;
-}
-
 .profile-card {
-  background-color: white;
-  padding: 100px;
-  margin: 80px;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 50px;
+  margin: 10px auto;
   border-radius: 10px;
-  max-width: 800px;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .profile{
@@ -40,28 +39,69 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
+  margin-top: 40px;
 }
 
-.setting-time input{
-  height: 35px;
-  width: 380px;
-  border-radius: 5px;
-  text-align: center;
+.setting-time, .setting-theme {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.setting-time button{
-  margin: 10px;
-  width: 150px;
-}
-
-.setting-theme select{
-  height: 37px;
-  width: 380px;
-  border-radius: 5px;
-  max-width: 370px;
+.buttons button{
+  color: black;
 }
 
 .setting-theme button{
   margin: 10px;
   width: 150px;
+}
+
+.setting-time input {
+  height: 40px;
+  width: 250px;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.setting-time button {
+  margin: 10px;
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.setting-time button:hover {
+  background-color: #e0e0e0;
+}
+
+.setting-theme select {
+  height: 40px;
+  width: 250px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.setting-theme button {
+  margin: 10px;
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.setting-theme button:hover {
+  background-color: #e0e0e0;
 }

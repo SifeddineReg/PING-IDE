@@ -1,31 +1,52 @@
-body {
-  font-family: sans-serif;
+.lead {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 45%;
+}
+
+.indicators {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 45%;
+  height: 100%;
 }
 
 .container {
   display: flex;
   align-items: flex-end;
+  justify-content: space-evenly;
+  width: 100%;
 }
 
-.podium__item {
-  width: 200px;
+.podium_item {
+  width: 30%;
 }
 
-.podium__rank {
+.podium_rank {
   display: flex;
   justify-content: center;
-  
+  align-items: center;
+  border-radius: 10px 10px 0 0;
 }
 
-.podium__rank .second_point{
+.podium_rank .second_point {
   color: black;
   text-align: center;
   line-height: 150px;
   font-size: 45px;
 }
 
-
-.podium__rank .third_point{
+.podium_rank .third_point {
   color: black;
   text-align: center;
   line-height: 45px;
@@ -41,36 +62,29 @@ body {
   align-items: center;
 }
 
-
-.podium__city {
+.podium_city {
   text-align: center;
   padding: 0 .5rem;
 }
 
-.podium__number {
+.podium_number {
   width: 27px;
   height: 75px;
 }
 
-.podium .first {
+.podium .first .podium_rank{
   min-height: 300px;
-  background: rgb(255,172,37);
-background: 
-  linear-gradient(333deg, 
-  rgba(255,172,37,1) 0%, 
-  rgba(254,207,51,1) 13%, 
-  rgba(254,224,51,1) 53%, 
-  rgba(255,172,37,1) 100%);
+  background-color: rgba(61, 108, 227, 0.85);
 }
 
-.podium .second {
+.podium .second .podium_rank{
   min-height: 200px;
-  background: blue;
+  background: rgba(255, 0, 0, 0.85);
 }
 
-.podium .third {
+.podium .third .podium_rank{
   min-height: 100px;
-  background: green;
+  background: rgba(69, 208, 19, 0.85);
 }
 
 .podium_member {
@@ -79,9 +93,18 @@ background:
   align-items: center;
 }
 
+.placement {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+
 .podium_member.align {
   display: flex;
   align-items: center;
+  width: 80%;
 }
 
 .podium_member.align p {
@@ -94,11 +117,11 @@ background:
 
 .podium_member {
   margin-top: 10px;
-  max-height: 50px;
-  min-width: 175px;
+  border-radius: 10px;
+  width: 90%;
   background: white;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .podium_member .name {
@@ -106,69 +129,73 @@ background:
   color: black;
   margin: 10px;
 }
-.podium_member .place{
+
+.podium_member .place {
   margin: 10px;
   color: black;
   left: 95px;
 }
-.podium_member .image{
-  max-height: 30px;
-  min-height: 30px;
-  min-width: 30px;
-  max-width: 30px;
-}
 
-.podium_member .points{
+.podium_member .points {
   color: black;
   padding-right: 5%;
+  margin: 0;
+}
+
+.points, .place, .name{
+  width: fit-content !important;
+  font-size: x-large;
 }
 
 .deadline_text {
   margin-top: 20px;
   background-color: white;
   color: black;
-  min-height: 60px;
-  min-width: 600px;
+  padding: 5px;
+  border-radius: 10px;
+  width: 80%;  
   position: relative;
   text-align: left;
-  font-size:xx-large;
+  font-size: large;
   text-align: center;
 }
-.podium_member .align{
+
+.podium_member .align {
   margin: 0px;
 }
 
-.image-container .ving_cinq {
+.image-container {
   position: relative;
-  width: 300px; 
-  height: 300px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  overflow: hidden;
-  clip-path: polygon(50% 0%, 100% 0%, 100% 50%, 50% 50%);
+  margin: 10px;
 }
 
 .image-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-} 
-
-
-.image-container .cinquante{
-  position: relative;
-  width: 300px; 
-  height: 300px;
-  border-radius: 50%;
-  overflow: hidden;
-  clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
 }
 
-.image-container .test{
-  position: relative;
-  width: 300px; 
-  height: 300px;
-  border-radius: 50%;
-  overflow: hidden;
-  clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
+.image-container .percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: white;
 }
 
+.cinquante {
+  display: flex;
+  flex-direction: column;
+}
+
+.ind_label {
+  text-align: center;
+}
+
+.ind_label p {
+  font-size: 20px;
+}
